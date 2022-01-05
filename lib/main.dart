@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
     // this is called when the class is initialized or called for the first time
     super
         .initState(); //  this is the material super constructor for init state to link your instance initState to the global initState context
-        _determinePosition();
+    _determinePosition();
   }
 
   Widget build(BuildContext context) {
@@ -118,11 +118,13 @@ class _MyAppState extends State<MyApp> {
                 child: Center(
                   child: Column(
                     children: [
-                      TextField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter a search term',
-                          icon: Icon(Icons.search),
+                       Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            hintText: 'Enter a search term',
+                            icon: Icon(Icons.search),
+                          ),
                         ),
                       ),
                       Padding(
