@@ -78,11 +78,17 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  initState() {
-    // this is called when the class is initialized or called for the first time
-    super
-        .initState(); //  this is the material super constructor for init state to link your instance initState to the global initState context
-    _determinePosition();
+  void initState() {
+    super.initState();
+    getLocation();
+  }
+
+  getLocation() async {
+    Position position = await _determinePosition();
+    location = 'Lat: ${position.latitude} , Long: ${position.longitude}';
+    GetAddressFromLatLong(position);
+
+    setState(() {});
   }
 
   Widget build(BuildContext context) {
@@ -96,8 +102,8 @@ class _MyAppState extends State<MyApp> {
               children: [
                 Text(Place),
                 IconButton(
-                  icon: const Icon(
-                    Icons.location_on,
+                  icon: Icon(
+                    Place == '' ? Icons.location_off : Icons.location_on,
                     color: Colors.white,
                   ),
                   onPressed: () async {
@@ -118,7 +124,7 @@ class _MyAppState extends State<MyApp> {
                 child: Center(
                   child: Column(
                     children: [
-                       Padding(
+                      Padding(
                         padding: EdgeInsets.all(15.0),
                         child: TextFormField(
                           decoration: const InputDecoration(
