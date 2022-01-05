@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:zomato_new/samplePages.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +37,10 @@ class _MyAppState extends State<MyApp> {
   String Address = '';
 
   String Place = '';
+
+  int _selectedItems = 0;
+
+  final _pagesContent = [const AboutPage(), const ServicesPage()];
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -68,40 +73,115 @@ class _MyAppState extends State<MyApp> {
     Placemark place = placemark[0];
     Address =
         '${place.street},${place.subLocality},${place.locality},${place.postalCode},${place.country},';
-    Place = '${place.locality}';
+    Place = '${place.subLocality}';
     setState(() {});
   }
 
   @override
+  initState() {
+    // this is called when the class is initialized or called for the first time
+    super
+        .initState(); //  this is the material super constructor for init state to link your instance initState to the global initState context
+        _determinePosition();
+  }
+
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text("Zomato"),
+          backgroundColor: Colors.red,
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(
-                Icons.location_on,
-                color: Colors.white,
-              ),
-              onPressed: () async {
-                Position position = await _determinePosition();
-                location =
-                    'Lat: ${position.latitude} , Long: ${position.longitude}';
-                GetAddressFromLatLong(position);
+            Row(
+              children: [
+                Text(Place),
+                IconButton(
+                  icon: const Icon(
+                    Icons.location_on,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    Position position = await _determinePosition();
+                    location =
+                        'Lat: ${position.latitude} , Long: ${position.longitude}';
+                    GetAddressFromLatLong(position);
 
-                setState(() {});
-              },
-            )
+                    setState(() {});
+                  },
+                )
+              ],
+            ),
           ],
         ),
-        body: const TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter a search term',
-            icon: Icon(Icons.search),
-          ),
-        ),
+        body: _selectedItems == 0
+            ? SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    children: [
+                      TextField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter a search term',
+                          icon: Icon(Icons.search),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          child: Container(
+                            child: Image.asset("assets/Food1.jpg",
+                                width: 380, height: 380),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          child: Container(
+                            child: Image.asset("assets/Food2.jpg",
+                                width: 380, height: 380),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          child: Container(
+                            child: Image.asset("assets/Food3.jpg",
+                                width: 380, height: 380),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : _selectedItems == 1
+                ? _pagesContent[0]
+                : _selectedItems == 2
+                    ? _pagesContent[1]
+                    : null,
+        bottomNavigationBar: BottomNavigationBar(
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: "Home",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.info_rounded),
+                label: "About",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                label: "Services",
+              ),
+            ],
+            onTap: (value) {
+              setState(() {
+                _selectedItems = value;
+              });
+            },
+            currentIndex: _selectedItems),
       ),
     );
   }
