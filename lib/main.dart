@@ -102,6 +102,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getLocation();
+    newDataList = [];
   }
 
   getLocation() async {
@@ -176,21 +177,9 @@ class _MyAppState extends State<MyApp> {
                                 ),
                                 onChanged: onItemChanged,
                               ),
-                              trailing: Text('$newDataList'),
+                              subtitle: Text(newDataList.join(",")),
                             ),
                           ),
-                          // Expanded(
-                          //   child: ListView(
-                          //       padding: EdgeInsets.all(12.0),
-                          //       children: newDataList.map(
-                          //         (data) {
-                          //           return ListTile(
-                          //             title: Text(data),
-                          //             onTap: () => print(data),
-                          //           );
-                          //         },
-                          //       ).toList()),
-                          // ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Card(
