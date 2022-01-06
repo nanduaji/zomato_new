@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:zomato_new/samplePages.dart';
-import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -31,6 +30,10 @@ class _MyAppState extends State<MyApp> {
 
   int _selectedItems = 0;
 
+  int currentCount = 0;
+
+  bool Value = false;
+
   static List<String> mainDataList = [
     "Apple",
     "Apricot",
@@ -47,12 +50,15 @@ class _MyAppState extends State<MyApp> {
     "Orange",
     "Papaya",
     "Peach",
-    "Pineapple",
     "Pomegranate",
     "Starfruit"
   ];
 
-  final _pagesContent = [const AboutPage(), const ServicesPage()];
+  final _pagesContent = [
+    const AboutPage(),
+    const ServicesPage(),
+    const CartPage()
+  ];
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -104,6 +110,20 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
+  addCounter() {
+    currentCount = currentCount + 1;
+    setState(() {
+      currentCount;
+    });
+  }
+
+  subCounter() {
+    currentCount = currentCount - 1;
+    setState(() {
+      currentCount;
+    });
+  }
+
   List<String> newDataList = List.from(mainDataList);
   onItemChanged(String value) {
     if (value != '') {
@@ -112,12 +132,14 @@ class _MyAppState extends State<MyApp> {
             .where(
                 (string) => string.toLowerCase().contains(value.toLowerCase()))
             .toList();
+        Value = true;
       });
       print("***************$newDataList");
     } else {
       setState(
         () {
           newDataList = [];
+          Value = false;
         },
       );
     }
@@ -127,31 +149,33 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: Text("Zomato"),
-          backgroundColor: Colors.red,
-          actions: <Widget>[
-            Row(
-              children: [
-                Text(Place),
-                IconButton(
-                  icon: Icon(
-                    Place == '' ? Icons.location_off : Icons.location_on,
-                    color: Colors.white,
-                  ),
-                  onPressed: () async {
-                    Position position = await _determinePosition();
-                    location =
-                        'Lat: ${position.latitude} , Long: ${position.longitude}';
-                    GetAddressFromLatLong(position);
+        appBar: _selectedItems == 0
+            ? AppBar(
+                title: Text("Zomato"),
+                backgroundColor: Colors.red,
+                actions: <Widget>[
+                  Row(
+                    children: [
+                      Text(Place),
+                      IconButton(
+                        icon: Icon(
+                          Place == '' ? Icons.location_off : Icons.location_on,
+                          color: Colors.white,
+                        ),
+                        onPressed: () async {
+                          Position position = await _determinePosition();
+                          location =
+                              'Lat: ${position.latitude} , Long: ${position.longitude}';
+                          GetAddressFromLatLong(position);
 
-                    setState(() {});
-                  },
-                )
-              ],
-            ),
-          ],
-        ),
+                          setState(() {});
+                        },
+                      )
+                    ],
+                  ),
+                ],
+              )
+            : null,
         body: Place != ''
             ? _selectedItems == 0
                 ? SingleChildScrollView(
@@ -171,8 +195,31 @@ class _MyAppState extends State<MyApp> {
                               subtitle: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
-                                    child: Text(
-                                      newDataList.join(","),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          newDataList.join(","),
+                                        ),
+                                        Value == true
+                                            ? Row(
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      subCounter();
+                                                    },
+                                                    child: Icon(Icons.remove),
+                                                  ),
+                                                  Text("$currentCount"),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      addCounter();
+                                                    },
+                                                    child: Icon(Icons.add),
+                                                  ),
+                                                ],
+                                              )
+                                            : Row(),
+                                      ],
                                     ),
                                     onTap: () {
                                       print(newDataList.join(","));
@@ -215,9 +262,12 @@ class _MyAppState extends State<MyApp> {
                     ? _pagesContent[0]
                     : _selectedItems == 2
                         ? _pagesContent[1]
-                        : null
+                        : _selectedItems == 3
+                            ? _pagesContent[2]
+                            : null
             : null,
         bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
@@ -230,6 +280,10 @@ class _MyAppState extends State<MyApp> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.settings),
                 label: "Services",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.shop),
+                label: "Cart",
               ),
             ],
             onTap: (value) {
