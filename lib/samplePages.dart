@@ -8,7 +8,10 @@ class AboutPage extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: Text('AboutPage')),
+        appBar: AppBar(
+          title: Text('AboutPage'),
+          backgroundColor: Colors.red,
+        ),
       ),
     );
   }
@@ -22,7 +25,10 @@ class ServicesPage extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: Text('ServicesPage')),
+        appBar: AppBar(
+          title: Text('ServicesPage'),
+          backgroundColor: Colors.red,
+        ),
       ),
     );
   }
@@ -44,6 +50,7 @@ class _CartPageState extends State<CartPage> {
       home: Scaffold(
         appBar: AppBar(
           title: Text("Your Cart"),
+          backgroundColor: Colors.red,
         ),
       ),
     );

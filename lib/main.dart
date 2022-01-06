@@ -199,7 +199,7 @@ class _MyAppState extends State<MyApp> {
                               title: TextFormField(
                                 controller: myController,
                                 decoration: const InputDecoration(
-                                  hintText: 'Enter a search term',
+                                  hintText: 'Search Dishes',
                                   icon: Icon(Icons.search),
                                 ),
                                 onChanged: onItemChanged,
@@ -241,27 +241,39 @@ class _MyAppState extends State<MyApp> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Card(
-                              child: Container(
-                                child: Image.asset("assets/Food1.jpg",
-                                    width: 380, height: 380),
+                              child: InkWell(
+                                child: Container(
+                                  child: Image.asset("assets/Food1.jpg",
+                                      width: 380, height: 380),
+                                ),
+                                onTap: () {},
                               ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Card(
-                              child: Container(
-                                child: Image.asset("assets/Food2.jpg",
-                                    width: 380, height: 380),
+                              child: InkWell(
+                                child: Container(
+                                  child: Image.asset(
+                                    "assets/Food2.jpg",
+                                    width: 380,
+                                    height: 380,
+                                  ),
+                                ),
+                                onTap: () {},
                               ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Card(
-                              child: Container(
-                                child: Image.asset("assets/Food3.jpg",
-                                    width: 380, height: 380),
+                              child: InkWell(
+                                child: Container(
+                                  child: Image.asset("assets/Food3.jpg",
+                                      width: 380, height: 380),
+                                ),
+                                onTap: () {},
                               ),
                             ),
                           ),
