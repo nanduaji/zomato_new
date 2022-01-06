@@ -40,6 +40,27 @@ class _MyAppState extends State<MyApp> {
 
   int _selectedItems = 0;
 
+  static List<String> mainDataList = [
+    "Apple",
+    "Apricot",
+    "Banana",
+    "Blackberry",
+    "Coconut",
+    "Date",
+    "Fig",
+    "Gooseberry",
+    "Grapes",
+    "Lemon",
+    "Litchi",
+    "Mango",
+    "Orange",
+    "Papaya",
+    "Peach",
+    "Pineapple",
+    "Pomegranate",
+    "Starfruit"
+  ];
+
   final _pagesContent = [const AboutPage(), const ServicesPage()];
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -91,8 +112,28 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
+  List<String> newDataList = List.from(mainDataList);
+  onItemChanged(String value) {
+    if (value != '') {
+      setState(() {
+        newDataList = mainDataList
+            .where(
+                (string) => string.toLowerCase().contains(value.toLowerCase()))
+            .toList();
+      });
+      print("***************$newDataList");
+    } else {
+      setState(
+        () {
+          newDataList = [];
+        },
+      );
+    }
+  }
+
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: Text("Zomato"),
@@ -119,56 +160,74 @@ class _MyAppState extends State<MyApp> {
             ),
           ],
         ),
-        body: _selectedItems == 0
-            ? SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: 'Enter a search term',
-                            icon: Icon(Icons.search),
+        body: Place != ''
+            ? _selectedItems == 0
+                ? SingleChildScrollView(
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(15.0),
+                            child: ListTile(
+                              title: TextFormField(
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter a search term',
+                                  icon: Icon(Icons.search),
+                                ),
+                                onChanged: onItemChanged,
+                              ),
+                              trailing: Text('$newDataList'),
+                            ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          child: Container(
-                            child: Image.asset("assets/Food1.jpg",
-                                width: 380, height: 380),
+                          // Expanded(
+                          //   child: ListView(
+                          //       padding: EdgeInsets.all(12.0),
+                          //       children: newDataList.map(
+                          //         (data) {
+                          //           return ListTile(
+                          //             title: Text(data),
+                          //             onTap: () => print(data),
+                          //           );
+                          //         },
+                          //       ).toList()),
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              child: Container(
+                                child: Image.asset("assets/Food1.jpg",
+                                    width: 380, height: 380),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          child: Container(
-                            child: Image.asset("assets/Food2.jpg",
-                                width: 380, height: 380),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              child: Container(
+                                child: Image.asset("assets/Food2.jpg",
+                                    width: 380, height: 380),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          child: Container(
-                            child: Image.asset("assets/Food3.jpg",
-                                width: 380, height: 380),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              child: Container(
+                                child: Image.asset("assets/Food3.jpg",
+                                    width: 380, height: 380),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              )
-            : _selectedItems == 1
-                ? _pagesContent[0]
-                : _selectedItems == 2
-                    ? _pagesContent[1]
-                    : null,
+                    ),
+                  )
+                : _selectedItems == 1
+                    ? _pagesContent[0]
+                    : _selectedItems == 2
+                        ? _pagesContent[1]
+                        : null
+            : null,
         bottomNavigationBar: BottomNavigationBar(
             items: const [
               BottomNavigationBarItem(
