@@ -29,7 +29,8 @@ class ServicesPage extends StatelessWidget {
 }
 
 class CartPage extends StatefulWidget {
-  const CartPage({Key? key}) : super(key: key);
+  // final List items;
+  // const CartPage({Key? key, required this.items}) : super(key: key);
 
   @override
   _CartPageState createState() => _CartPageState();

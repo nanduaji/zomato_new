@@ -22,6 +22,7 @@ void _openLocationSettings() async {
 }
 
 class _MyAppState extends State<MyApp> {
+  final myController = TextEditingController();
   String location = '';
   // ignore: non_constant_identifier_names
   String Address = '';
@@ -33,6 +34,8 @@ class _MyAppState extends State<MyApp> {
   int currentCount = 0;
 
   bool Value = false;
+
+  late final List<String> selectedItems = [];
 
   static List<String> mainDataList = [
     "Apple",
@@ -57,7 +60,9 @@ class _MyAppState extends State<MyApp> {
   final _pagesContent = [
     const AboutPage(),
     const ServicesPage(),
-    const CartPage()
+    CartPage(
+        // items: [selectedItems],
+        )
   ];
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -110,15 +115,19 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
-  addCounter() {
+  addCounter(text) {
     currentCount = currentCount + 1;
+
+    currentCount >= 10 ? currentCount = 10 : currentCount;
     setState(() {
       currentCount;
     });
+    selectedItems.add(text);
   }
 
   subCounter() {
     currentCount = currentCount - 1;
+    currentCount < 0 ? currentCount = 0 : currentCount;
     setState(() {
       currentCount;
     });
@@ -130,11 +139,13 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         newDataList = mainDataList
             .where(
-                (string) => string.toLowerCase().contains(value.toLowerCase()))
+              (string) => string.toLowerCase().contains(
+                    value.toLowerCase(),
+                  ),
+            )
             .toList();
         Value = true;
       });
-      print("***************$newDataList");
     } else {
       setState(
         () {
@@ -186,6 +197,7 @@ class _MyAppState extends State<MyApp> {
                             padding: EdgeInsets.all(15.0),
                             child: ListTile(
                               title: TextFormField(
+                                controller: myController,
                                 decoration: const InputDecoration(
                                   hintText: 'Enter a search term',
                                   icon: Icon(Icons.search),
@@ -194,36 +206,35 @@ class _MyAppState extends State<MyApp> {
                               ),
                               subtitle: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          newDataList.join(","),
-                                        ),
-                                        Value == true
-                                            ? Row(
-                                                children: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      subCounter();
-                                                    },
-                                                    child: Icon(Icons.remove),
-                                                  ),
-                                                  Text("$currentCount"),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      addCounter();
-                                                    },
-                                                    child: Icon(Icons.add),
-                                                  ),
-                                                ],
-                                              )
-                                            : Row(),
-                                      ],
+                                child: Wrap(
+                                  children: [
+                                    InkWell(
+                                      child: Text(
+                                        newDataList.join(","),
+                                      ),
+                                      onTap: () {},
                                     ),
-                                    onTap: () {
-                                      print(newDataList.join(","));
-                                    }),
+                                    Value == true
+                                        ? Row(
+                                            children: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  subCounter();
+                                                },
+                                                child: Icon(Icons.remove),
+                                              ),
+                                              Text("$currentCount"),
+                                              TextButton(
+                                                onPressed: () {
+                                                  addCounter(myController.text);
+                                                },
+                                                child: Icon(Icons.add),
+                                              ),
+                                            ],
+                                          )
+                                        : Row(),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
