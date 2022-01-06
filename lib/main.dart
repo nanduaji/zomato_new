@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:zomato_new/samplePages.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -17,18 +20,6 @@ class MyApp extends StatefulWidget {
 final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
 void _openLocationSettings() async {
   final opened = await _geolocatorPlatform.openLocationSettings();
-  // String displayValue;
-
-  // if (opened) {
-  //   displayValue = 'Opened Location Settings';
-  // } else {
-  //   displayValue = 'Error opening Location Settings';
-  // }
-
-  // _updatePositionList(
-  //   _PositionItemType.log,
-  //   displayValue,
-  // );
 }
 
 class _MyAppState extends State<MyApp> {
@@ -177,7 +168,16 @@ class _MyAppState extends State<MyApp> {
                                 ),
                                 onChanged: onItemChanged,
                               ),
-                              subtitle: Text(newDataList.join(",")),
+                              subtitle: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                    child: Text(
+                                      newDataList.join(","),
+                                    ),
+                                    onTap: () {
+                                      print(newDataList.join(","));
+                                    }),
+                              ),
                             ),
                           ),
                           Padding(
