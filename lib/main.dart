@@ -134,7 +134,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   addTocart(text) {
-    selectedItems.add(text);
+    currentCount > 0 ? selectedItems.add(text) : null;
   }
 
   List<String> newDataList = List.from(mainDataList);
@@ -219,7 +219,9 @@ class _MyAppState extends State<MyApp> {
                                             newDataList.join(","),
                                           ),
                                           onTap: () {
-                                            addTocart(newDataList.join(","),);
+                                            addTocart(
+                                              newDataList.join(","),
+                                            );
                                           },
                                         ),
                                         Value == true

@@ -40,21 +40,29 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("*********************$items");
-    return ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: items.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Container(
-                height: 50,
-                color: Colors.red,
-                child: Center(child: Text('${items[index]}')),
-              ),
-            ),
-          );
-        });
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Your Cart"),
+          backgroundColor: Colors.red,
+        ),
+        body: ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: items.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Container(
+                    height: 50,
+                    color: Colors.red,
+                    child: Center(child: Text('${items[index]}')),
+                  ),
+                ),
+              );
+            }),
+      ),
+    );
   }
 }
