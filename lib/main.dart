@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
 
   bool Value = false;
 
-  late final List<String> selectedItems = [];
+  static List<dynamic> selectedItems = [];
 
   static List<String> mainDataList = [
     "Apple",
@@ -61,8 +61,8 @@ class _MyAppState extends State<MyApp> {
     const AboutPage(),
     const ServicesPage(),
     CartPage(
-        // items: [selectedItems],
-        )
+      items: selectedItems,
+    )
   ];
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -115,14 +115,14 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
-  addCounter(text) {
+  addCounter() {
     currentCount = currentCount + 1;
 
     currentCount >= 10 ? currentCount = 10 : currentCount;
     setState(() {
       currentCount;
     });
-    selectedItems.add(text);
+    // selectedItems.add(text);
   }
 
   subCounter() {
@@ -131,6 +131,10 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       currentCount;
     });
+  }
+
+  addTocart(text) {
+    selectedItems.add(text);
   }
 
   List<String> newDataList = List.from(mainDataList);
@@ -206,33 +210,39 @@ class _MyAppState extends State<MyApp> {
                               ),
                               subtitle: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Wrap(
+                                child: Row(
                                   children: [
-                                    InkWell(
-                                      child: Text(
-                                        newDataList.join(","),
-                                      ),
-                                      onTap: () {},
+                                    Wrap(
+                                      children: [
+                                        InkWell(
+                                          child: Text(
+                                            newDataList.join(","),
+                                          ),
+                                          onTap: () {
+                                            addTocart(newDataList.join(","),);
+                                          },
+                                        ),
+                                        Value == true
+                                            ? Row(
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      subCounter();
+                                                    },
+                                                    child: Icon(Icons.remove),
+                                                  ),
+                                                  Text("$currentCount"),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      addCounter();
+                                                    },
+                                                    child: Icon(Icons.add),
+                                                  ),
+                                                ],
+                                              )
+                                            : Row(),
+                                      ],
                                     ),
-                                    Value == true
-                                        ? Row(
-                                            children: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  subCounter();
-                                                },
-                                                child: Icon(Icons.remove),
-                                              ),
-                                              Text("$currentCount"),
-                                              TextButton(
-                                                onPressed: () {
-                                                  addCounter(myController.text);
-                                                },
-                                                child: Icon(Icons.add),
-                                              ),
-                                            ],
-                                          )
-                                        : Row(),
                                   ],
                                 ),
                               ),
