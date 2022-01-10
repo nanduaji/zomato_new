@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:zomato_new/samplePages.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +22,21 @@ void _openLocationSettings() async {
   final opened = await _geolocatorPlatform.openLocationSettings();
 }
 
+class Data {
+  final String name;
+  final int price;
+  Data({
+    required this.name,
+    required this.price,
+  });
+  factory Data.fromJson(Map<String, dynamic> json) {
+    return Data(
+      name: json['name'],
+      price: json['price'],
+    );
+  }
+}
+
 class _MyAppState extends State<MyApp> {
   final myController = TextEditingController();
   String location = '';
@@ -31,11 +47,13 @@ class _MyAppState extends State<MyApp> {
 
   int _selectedItems = 0;
 
-  int currentCount = 0;
+  static int currentCount = 0;
 
   bool Value = false;
 
   static List<dynamic> selectedItems = [];
+
+  int Price = 0;
 
   static List<String> mainDataList = [
     "Apple",
@@ -57,11 +75,15 @@ class _MyAppState extends State<MyApp> {
     "Starfruit"
   ];
 
+  static List<int> priceOfVariables = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+
   final _pagesContent = [
     const AboutPage(),
     const ServicesPage(),
     CartPage(
       items: selectedItems,
+      // count: currentCount,
+      // location: Place,
     )
   ];
   Future<Position> _determinePosition() async {
@@ -100,10 +122,13 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
+  // List<String> newDataList1 = List.from(mainDataList);
+  Iterable newData = mainDataList.map((data) => data);
   @override
   void initState() {
     super.initState();
     getLocation();
+    // futureData = getData();
     newDataList = [];
   }
 
@@ -115,6 +140,22 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
+  Future<Data> getData() async {
+    final http.Response response = await http.get(
+      Uri.parse("https://run.mocky.io/v3/c8c033fa-b0d5-4d2e-8988-fef388d39a3f"),
+      headers: {
+        "Accept": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    );
+    if (response.statusCode == 200) {
+      print("*********************${Data.fromJson(jsonDecode(response.body))}");
+      return Data.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('failed to load data');
+    }
+  }
+
   addCounter() {
     currentCount = currentCount + 1;
 
@@ -122,7 +163,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       currentCount;
     });
-    // selectedItems.add(text);
+    getData();
   }
 
   subCounter() {
@@ -159,6 +200,7 @@ class _MyAppState extends State<MyApp> {
         () {
           newDataList = [];
           Value = false;
+          currentCount = 0;
         },
       );
     }
@@ -260,22 +302,9 @@ class _MyAppState extends State<MyApp> {
                             child: Card(
                               child: InkWell(
                                 child: Container(
-                                  child: Image.asset("assets/Food1.jpg",
-                                      width: 380, height: 380),
-                                ),
-                                onTap: () {},
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Card(
-                              child: InkWell(
-                                child: Container(
                                   child: Image.asset(
-                                    "assets/Food2.jpg",
-                                    width: 380,
-                                    height: 380,
+                                    "assets/Food4.jpg",
+                                    // width: 380, height: 380
                                   ),
                                 ),
                                 onTap: () {},
@@ -287,10 +316,31 @@ class _MyAppState extends State<MyApp> {
                             child: Card(
                               child: InkWell(
                                 child: Container(
-                                  child: Image.asset("assets/Food3.jpg",
-                                      width: 380, height: 380),
+                                  child: Image.asset(
+                                    "assets/Food1.jpg",
+                                    // width: 180,
+                                    // height: 180,
+                                  ),
                                 ),
                                 onTap: () {},
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                              child: Card(
+                                child: InkWell(
+                                  child: Container(
+                                    child: Image.asset(
+                                      "assets/Food3.jpg",
+                                      width: 380,
+                                      height: 380,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                  onTap: () {},
+                                ),
                               ),
                             ),
                           ),
