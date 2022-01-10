@@ -47,21 +47,26 @@ class CartPage extends StatelessWidget {
           title: Text("Your Cart"),
           backgroundColor: Colors.red,
         ),
-        body: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: Container(
-                    height: 50,
-                    color: Colors.red,
-                    child: Center(child: Text('${items[index]}')),
-                  ),
-                ),
-              );
-            }),
+        // ignore: unrelated_type_equality_checks
+        body: items.length == 0
+            ? const Center(
+                child: Text("Add Something To The Cart"),
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: items.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Container(
+                        height: 50,
+                        color: Colors.red,
+                        child: Center(child: Text('${items[index]}')),
+                      ),
+                    ),
+                  );
+                }),
       ),
     );
   }

@@ -137,6 +137,10 @@ class _MyAppState extends State<MyApp> {
     currentCount > 0 ? selectedItems.add(text) : null;
   }
 
+  removeFromCart(text) {
+    selectedItems.remove(text);
+  }
+
   List<String> newDataList = List.from(mainDataList);
   onItemChanged(String value) {
     if (value != '') {
@@ -218,11 +222,6 @@ class _MyAppState extends State<MyApp> {
                                           child: Text(
                                             newDataList.join(","),
                                           ),
-                                          onTap: () {
-                                            addTocart(
-                                              newDataList.join(","),
-                                            );
-                                          },
                                         ),
                                         Value == true
                                             ? Row(
@@ -230,6 +229,9 @@ class _MyAppState extends State<MyApp> {
                                                   TextButton(
                                                     onPressed: () {
                                                       subCounter();
+                                                      removeFromCart(
+                                                        newDataList.join(","),
+                                                      );
                                                     },
                                                     child: Icon(Icons.remove),
                                                   ),
@@ -237,6 +239,9 @@ class _MyAppState extends State<MyApp> {
                                                   TextButton(
                                                     onPressed: () {
                                                       addCounter();
+                                                      addTocart(
+                                                        newDataList.join(","),
+                                                      );
                                                     },
                                                     child: Icon(Icons.add),
                                                   ),
